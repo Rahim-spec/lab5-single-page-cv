@@ -1,37 +1,35 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Highlight Active Nav Link based on Scroll Position
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
+    const navLinks = document.querySelectorAll('.nav-btn');
+    const sections = document.querySelectorAll('.section-panel');
 
-    function highlightNavOnScroll() {
-        const scrollY = window.pageYOffset;
+    // ScrollSpy: Update active nav button based on scroll position
+    window.addEventListener('scroll', () => {
+        let currentSectionId = '';
 
-        sections.forEach(current => {
-            const sectionHeight = current.offsetHeight;
-            const sectionTop = current.offsetTop - 100; // Offset for header
-            const sectionId = current.getAttribute('id');
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 120;
+            const sectionHeight = section.offsetHeight;
 
-            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
+            if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                currentSectionId = section.getAttribute('id');
             }
         });
-    }
 
-    window.addEventListener('scroll', highlightNavOnScroll);
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${currentSectionId}`) {
+                link.classList.add('active');
+            }
+        });
+    });
 
-    // 2. Interactive Certificate View Buttons
+    // Certificate button alert feedback
     const viewButtons = document.querySelectorAll('.btn-view');
     viewButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
+        button.addEventListener('click', () => {
             const certName = button.getAttribute('data-cert');
-            alert(`Opening certificate viewer for: ${certName}`);
+            alert(`Opening certificate preview for: ${certName}`);
         });
     });
 
